@@ -2,4 +2,10 @@ backend/venv/
 backend/__pycache__/
 backend/.env
 backend/sample_resume.pdf
+**/__pycache__/
 *.pyc
+*.pyo
+frontend/node_modules/
+frontend/dist/
+.DS_Store
+.vscode/
