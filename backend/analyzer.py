@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 print("API KEY:", os.getenv("GEMINI_API_KEY"))
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 PROMPT_TEMPLATE = """
 You are an expert ATS (Applicant Tracking System) and senior career coach.
