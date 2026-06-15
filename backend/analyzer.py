@@ -4,7 +4,6 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
-print("API KEY:", os.getenv("GEMINI_API_KEY"))
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.0-flash")
 
@@ -23,14 +22,14 @@ JOB DESCRIPTION:
 
 Return this exact JSON structure:
 {{
-  "ats_score": ,
-  "match_percentage": ,
-  "matched_skills": [],
-  "missing_skills": [],
-  "strengths": [],
-  "suggestions": [],
-  "experience_gap": "",
-  "verdict": ""
+  "ats_score": <integer 0-100>,
+  "match_percentage": <integer 0-100>,
+  "matched_skills": ["skill1", "skill2"],
+  "missing_skills": ["skill1", "skill2"],
+  "strengths": ["strength1", "strength2", "strength3"],
+  "suggestions": ["suggestion1", "suggestion2", "suggestion3", "suggestion4"],
+  "experience_gap": "<one sentence>",
+  "verdict": "<one sentence>"
 }}
 
 Rules you must follow:
@@ -46,10 +45,7 @@ def analyze_resume(resume_text: str, job_description: str) -> dict:
         resume_text=resume_text[:3000],
         job_description=job_description[:1500]
     )
-
     response = model.generate_content(prompt)
     raw = response.text.strip()
-
     raw = raw.replace("```json", "").replace("```", "").strip()
-
     return json.loads(raw)
