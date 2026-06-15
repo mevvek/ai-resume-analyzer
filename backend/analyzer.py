@@ -1,11 +1,10 @@
 import os
 import json
-import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-2.0-flash")
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 PROMPT_TEMPLATE = """
 You are an expert ATS (Applicant Tracking System) and senior career coach.
@@ -32,11 +31,9 @@ Return this exact JSON structure:
   "verdict": "<one sentence>"
 }}
 
-Rules you must follow:
-- Skills must be specific e.g. "React.js", "PostgreSQL", "Docker" not "programming"
-- Suggestions must start with a verb e.g. "Add a projects section...", "Include metrics..."
-- ats_score: consider keyword density, section headers, formatting signals
-- match_percentage: consider skills overlap and experience alignment only
+Rules:
+- Skills must be specific e.g. "React.js", "PostgreSQL", "Docker"
+- Suggestions must start with a verb
 - Do not invent skills not mentioned in either document
 """
 
@@ -45,7 +42,11 @@ def analyze_resume(resume_text: str, job_description: str) -> dict:
         resume_text=resume_text[:3000],
         job_description=job_description[:1500]
     )
-    response = model.generate_content(prompt)
-    raw = response.text.strip()
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.3
+    )
+    raw = response.choices[0].message.content.strip()
     raw = raw.replace("```json", "").replace("```", "").strip()
     return json.loads(raw)
