@@ -56,5 +56,6 @@ Open `http://localhost:5173`
 
 ## 👤 Author
 
-**Vivek** — BCA 3rd Year  
+**Vivek Yadav** — BCA 3rd Year  
+Invertis University  , Bareilly 
 [GitHub](https://github.com/mevvek)
